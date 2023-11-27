@@ -1,9 +1,9 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: 'andrewnx - Freelance Developer',
+  title: 'andrewnx - Web and Software Developer',
   author: 'Andrew Nicholas',
   headerTitle: 'andrewnx',
-  description: 'Freelance Web Developer and Programmer',
+  description: 'Web and Software Developer',
   language: 'en-us',
   theme: 'system', // system, dark or light
   siteUrl: 'https://www.andrewnx.com',
