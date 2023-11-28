@@ -1,6 +1,6 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: 'andrewnx - Software Developer',
+  title: 'Andrew Nicholas',
   author: 'Andrew Nicholas',
   headerTitle: 'andrewnx',
   description: 'Software Developer',
@@ -14,6 +14,7 @@ const siteMetadata = {
   email: 'andrewbnx@outlook.com',
   github: 'https://github.com/andrewnx/',
   youtube: 'https://youtube.com',
+  twitter: 'https://x.com/andrewnxext/',
   linkedin: 'https://www.linkedin.com/in/andrewnx/',
   locale: 'en-US',
   analytics: {
