@@ -2,7 +2,7 @@
 const siteMetadata = {
   title: 'Andrew Nicholas',
   author: 'Andrew Nicholas',
-  headerTitle: 'andrewnx',
+  headerTitle: 'Andrew Nicholas',
   description: 'Software Developer',
   language: 'en-us',
   theme: 'system', // system, dark or light
