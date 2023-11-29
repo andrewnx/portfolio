@@ -1,5 +1,5 @@
 const projectsData = [
-   {
+  {
     title: 'Tuxedo Cat Coffee',
     description: `Term Project for CP1212 Introduction to JavaScript.
      `,
