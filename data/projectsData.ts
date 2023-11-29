@@ -13,6 +13,7 @@ const projectsData = [
      `,
     imgSrc: '/static/images/tuxedocat.webp',
     href: 'https://tuxedocat.vercel.app/',
+    repo: 'https://github.com/tuxedocat/',
   },
 ]
 
