@@ -48,11 +48,11 @@ const Card = ({ title, description, imgSrc, href, repo }) => (
             View Demo &rarr;
           </Link>
         )}
-        {href && (
+        {repo && ( // Changed this line to check for repo instead of href
           <Link
             href={repo}
             className="text-base font-medium leading-6 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-            aria-label={`Link to ${title}`}
+            aria-label={`Link to ${title} repository`} // Changed the aria-label to be more specific
           >
             View Repo &rarr;
           </Link>
