@@ -8,13 +8,13 @@ const siteMetadata = {
   theme: 'system', // system, dark or light
   siteUrl: 'https://www.andrewnx.com',
   siteRepo: 'https://github.com/andrewnx/portfolio',
-  siteLogo: '/static/images/logo.png',
+  /* siteLogo: '/static/images/logo.png', */
   socialBanner: '/static/images/twitter-card.png',
-  mastodon: 'https://mastodon.social/@mastodonuser',
+  /* mastodon: 'https://mastodon.social/@mastodonuser', */
   email: 'andrewbnx@outlook.com',
   github: 'https://github.com/andrewnx/',
-  youtube: 'https://youtube.com',
-  twitter: 'https://x.com/andrewnxext/',
+  /* youtube: 'https://youtube.com', */
+  /* twitter: 'https://x.com/andrewnxext/', */
   linkedin: 'https://www.linkedin.com/in/andrewnx/',
   locale: 'en-US',
   analytics: {
