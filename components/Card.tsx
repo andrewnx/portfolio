@@ -51,24 +51,26 @@ const Card = ({
           )}
         </h2>
         <p className="prose mb-3 max-w-none text-gray-500 dark:text-gray-400">{description}</p>
-        {href && (
-          <Link
-            href={href}
-            className="text-base font-medium leading-6 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-            aria-label={`Link to ${title}`}
-          >
-            View Demo &rarr;
-          </Link>
-        )}
-        {repo && ( // Changed this line to check for repo instead of href
-          <Link
-            href={repo}
-            className="text-base font-medium leading-6 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-            aria-label={`Link to ${title} repository`} // Changed the aria-label to be more specific
-          >
-            View Repo &rarr;
-          </Link>
-        )}
+        <div className="flex justify-between">
+          {href && (
+            <Link
+              href={href}
+              className="text-base font-medium leading-6 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+              aria-label={`Link to ${title}`}
+            >
+              View Demo &rarr;
+            </Link>
+          )}
+          {repo && ( // Changed this line to check for repo instead of href
+            <Link
+              href={repo}
+              className="text-base font-medium leading-6 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+              aria-label={`Link to ${title} repository`} // Changed the aria-label to be more specific
+            >
+              View Repo &rarr;
+            </Link>
+          )}
+        </div>
       </div>
     </div>
   </div>
