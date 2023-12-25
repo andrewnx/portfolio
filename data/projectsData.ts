@@ -1,9 +1,9 @@
 const projectsData = [
   {
-    title: 'Tuxedo Cat Coffee',
-    description: `Term Project for CP1212 Introduction to JavaScript.
+    title: 'Baseball Team Manager',
+    description: `Term Project for CP1855 Introduction to Python.
      `,
-    imgSrc: '/static/images/tuxedocat.webp',
+    imgSrc: '#',
     href: 'https://tuxedocat.vercel.app/',
     repo: 'https://github.com/baseballteammanager/',
   },
