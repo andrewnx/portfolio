@@ -1,7 +1,39 @@
 const projectsData = [
   {
-    title: 'Ladderspike',
-    description: `Term Project for CR1511 Website Development.
+    title: 'Vue Cards',
+    description: `CP2010 Frameworks.
+     `,
+    imgSrc: '#',
+    href: '#',
+    repo: '#',
+  },
+  {
+    title: 'Weather App',
+    description: `Project for CP1580 Using Internet APIs.
+     `,
+    imgSrc: '#',
+    href: '#',
+    repo: '#',
+  },
+  {
+    title: 'Movie App',
+    description: `Project for CP1580 Using Internet APIs.
+     `,
+    imgSrc: '#',
+    href: '#',
+    repo: '#',
+  },
+  {
+    title: 'NL Gardener',
+    description: `Project for CP1410 Web Analysis & Design.
+     `,
+    imgSrc: '#',
+    href: '#',
+    repo: '#',
+  },
+  {
+    title: 'Memory Game',
+    description: `Project for CP1292 JavaScript and NodeJS.
      `,
     imgSrc: '#',
     href: '#',
