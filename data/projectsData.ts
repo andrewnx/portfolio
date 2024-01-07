@@ -35,25 +35,25 @@ const projectsData = [
     title: 'NL Gardener',
     description: `Project for CP1410 Web Analysis & Design.
      `,
-    imgSrc: '#',
-    href: '#',
-    repo: '#',
+    imgSrc: 'static/images/nlgardener.png',
+    href: 'https://ornate-granita-4751d9.netlify.app/',
+    repo: 'https://github.com/andrewnx/nlgardener',
   },
   {
     title: 'Memory Game',
     description: `Project for CP1292 JavaScript and NodeJS.
      `,
-    imgSrc: '#',
-    href: '#',
-    repo: '#',
+    imgSrc: 'static/images/memory.png',
+    href: 'https://gentle-mandazi-cdb867.netlify.app/',
+    repo: 'https://github.com/andrewnx/memorygame',
   },
   {
     title: 'Baseball Team Manager',
     description: `Term Project for CP1855 Introduction to Python.
      `,
     imgSrc: '#',
-    href: '#',
-    repo: '#',
+    href: 'https://baseballteammanager.vercel.app/',
+    repo: 'https://github.com/andrewnx/baseballteammanager',
   },
   {
     title: 'Tuxedo Cat Coffee',
