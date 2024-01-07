@@ -1,15 +1,15 @@
 const projectsData = [
   {
     title: 'Vue Cards',
-    description: `CP2010 Frameworks.
+    description: `Term Project for CP2010 Frameworks.
      `,
     imgSrc: '#',
-    href: '#',
+    href: 'https://polite-medovik-fc1ae5.netlify.app/',
     repo: '#',
   },
   {
     title: 'Weather App',
-    description: `Project for CP1580 Using Internet APIs.
+    description: `Assignment for CP1580 Using Internet APIs.
      `,
     imgSrc: '#',
     href: '#',
@@ -17,15 +17,15 @@ const projectsData = [
   },
   {
     title: 'Movie App',
-    description: `Project for CP1580 Using Internet APIs.
+    description: `Assignment for CP1580 Using Internet APIs.
      `,
-    imgSrc: '#',
-    href: '#',
-    repo: '#',
+    imgSrc: 'static/images/movie.png',
+    href: 'https://vermillion-lamington-702a73.netlify.app/',
+    repo: 'https://github.com/andrewnx/movies',
   },
   {
     title: 'Ladderspike',
-    description: `Project for CP1410 Web Analysis & Design.
+    description: `Term Project for CP1410 Web Analysis & Design.
      `,
     imgSrc: 'static/images/ls.png',
     href: 'http://anwp.atwebpages.com/',
@@ -33,7 +33,7 @@ const projectsData = [
   },
   {
     title: 'NL Gardener',
-    description: `Project for CP1410 Web Analysis & Design.
+    description: `Term Project for CP1410 Web Analysis & Design.
      `,
     imgSrc: 'static/images/nlgardener.png',
     href: 'https://ornate-granita-4751d9.netlify.app/',
@@ -41,7 +41,7 @@ const projectsData = [
   },
   {
     title: 'Memory Game',
-    description: `Project for CP1292 JavaScript and NodeJS.
+    description: `Term Project for CP1292 JavaScript and NodeJS.
      `,
     imgSrc: 'static/images/memory.png',
     href: 'https://gentle-mandazi-cdb867.netlify.app/',
