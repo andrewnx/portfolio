@@ -24,6 +24,14 @@ const projectsData = [
     repo: '#',
   },
   {
+    title: 'Ladderspike',
+    description: `Project for CP1410 Web Analysis & Design.
+     `,
+    imgSrc: 'static/images/ls.png',
+    href: 'http://anwp.atwebpages.com/',
+    repo: 'https://github.com/andrewnx/ladderspike',
+  },
+  {
     title: 'NL Gardener',
     description: `Project for CP1410 Web Analysis & Design.
      `,
