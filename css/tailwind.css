@@ -49,3 +49,7 @@ input:-webkit-autofill:focus {
   display: inline-block;
   vertical-align: middle;
 }
+
+.icon-bg {
+  @apply rounded-full border border-gray-200 bg-white bg-opacity-95 p-1 shadow-xl;
+}

@@ -7,20 +7,46 @@ interface Project {
 
 const projectsData: Project[] = [
   {
-    title: 'A Search Engine',
-    description: `What if you could look up any information in the world? Webpages, images, videos
-    and more. Google has many features to help you find exactly what you're looking
-    for.`,
-    imgSrc: '/static/images/google.png',
-    href: 'https://www.google.com',
+    title: 'Vue Cards',
+    description: `Term Project for CP2010 Frameworks.
+     `,
+    /* imgSrc: '#', */
+    href: 'https://polite-medovik-fc1ae5.netlify.app/',
   },
   {
-    title: 'The Time Machine',
-    description: `Imagine being able to travel back in time or to the future. Simple turn the knob
-    to the desired date and press "Go". No more worrying about lost keys or
-    forgotten headphones with this simple yet affordable solution.`,
-    imgSrc: '/static/images/time-machine.jpg',
-    href: '/blog/the-time-machine',
+    title: 'Weather App',
+    description: `Assignment for CP1580 Using Internet APIs.
+     `,
+    /* imgSrc: '#', */
+    href: '#',
+  },
+  {
+    title: 'Movie App',
+    description: `Assignment for CP1580 Using Internet APIs.
+     `,
+    /* imgSrc: '#', */
+    href: 'https://vermillion-lamington-702a73.netlify.app/',
+  },
+  {
+    title: 'Ladderspike',
+    description: `Term Project for CP1410 Web Analysis & Design.
+     `,
+    /* imgSrc: '#', */
+    href: 'http://anwp.atwebpages.com/',
+  },
+  {
+    title: 'Memory Game',
+    description: `Term Project for CP1292 JavaScript and NodeJS.
+     `,
+   /*  imgSrc: '#', */
+    href: 'https://gentle-mandazi-cdb867.netlify.app/',
+  },
+  {
+    title: 'Baseball Team Manager',
+    description: `Term Project for CP1855 Introduction to Python.
+     `,
+   /*  imgSrc: '#', */
+    href: 'https://baseballteammanager.vercel.app/',
   },
 ]
 
