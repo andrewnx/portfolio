@@ -1,10 +1,9 @@
-'use client'
-
 import { useState } from 'react'
 import { Authors, allAuthors } from 'contentlayer/generated'
 import { MDXLayoutRenderer } from 'pliny/mdx-components'
 import AuthorLayout from '@/layouts/AuthorLayout'
 import { coreContent } from 'pliny/utils/contentlayer'
+import { genPageMetadata } from 'app/seo'
 import Python from '@/components/icons/python.svg'
 import JavaScript from '@/components/icons/javascript.svg'
 import HTML from '@/components/icons/html.svg'
@@ -35,14 +34,11 @@ import Notion from '@/components/icons/notion.svg'
 import Certifications from '@/components/Certifications'
 import Image from 'next/image'
 
+export const metadata = genPageMetadata({ title: 'About' })
+
 export default function Page() {
-  const [showIcons, setShowIcons] = useState(true)
   const author = allAuthors.find((p) => p.slug === 'default') as Authors
   const mainContent = coreContent(author)
-
-  const toggleIcons = () => {
-    setShowIcons(!showIcons)
-  }
 
   const languages = [
     { name: 'HTML', Icon: HTML },
@@ -119,43 +115,31 @@ export default function Page() {
         <div className="dark:prose-dark prose max-w-none lg:prose-lg">
           <div className="flex items-center justify-between">
             <h2>Skills</h2>
-            <button
-              onClick={toggleIcons}
-              className="rounded border border-gray-200 bg-white px-4 py-1 text-center text-gray-900 shadow-md transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
-            >
-              {showIcons ? 'Show Text' : 'Show Icons'}
-            </button>
           </div>
           <div className="text-gray-900 dark:text-white">
             <p>
               <b>Languages:</b>
               <br />
-              {showIcons ? (
-                <span className="ml-2 space-x-2">
-                  {languages.map((lang) => (
-                    <i key={lang.name} className="icon-bg inline-block" title={lang.name}>
-                      <lang.Icon className="h-6 w-6" />
-                    </i>
-                  ))}
-                </span>
-              ) : (
-                languages.map((lang) => lang.name).join(' | ')
-              )}
+
+              <span className="ml-2 space-x-2">
+                {languages.map((lang) => (
+                  <i key={lang.name} className="icon-bg inline-block" title={lang.name}>
+                    <lang.Icon className="h-8 w-8" />
+                  </i>
+                ))}
+              </span>
             </p>
             <p>
               <b>Frameworks & Tools:</b>
               <br />
-              {showIcons ? (
-                <span className="ml-2 space-x-2">
-                  {frameworks.map((fw) => (
-                    <i key={fw.name} className="icon-bg inline-block" title={fw.name}>
-                      <fw.Icon className="h-6 w-6" />
-                    </i>
-                  ))}
-                </span>
-              ) : (
-                frameworks.map((fw) => fw.name).join(' | ')
-              )}
+
+              <span className="ml-2 space-x-2">
+                {frameworks.map((fw) => (
+                  <i key={fw.name} className="icon-bg inline-block" title={fw.name}>
+                    <fw.Icon className="h-8 w-8" />
+                  </i>
+                ))}
+              </span>
             </p>
           </div>
 
