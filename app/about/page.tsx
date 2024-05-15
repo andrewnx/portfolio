@@ -93,7 +93,7 @@ export default function Page() {
       ],
     },
     {
-      title: 'Administrative Assistant (Temp), PCSP Chamber of Commerce (Jul ‘21 - Sep ‘21)',
+      title: 'Administrative Assistant, PCSP Chamber of Commerce (Jul ‘21 - Sep ‘21)',
       tasks: [
         "Managed and updated the organization's WordPress and Squarespace websites, including data entry, image editing, and design contributions.",
         'Supported the Executive Director with diverse administrative tasks, demonstrating flexibility and a broad skill set in office management and web administration.',
