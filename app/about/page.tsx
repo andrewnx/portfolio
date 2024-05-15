@@ -124,7 +124,7 @@ export default function Page() {
               <span className="ml-2 space-x-2">
                 {languages.map((lang) => (
                   <i key={lang.name} className="icon-bg inline-block" title={lang.name}>
-                    <lang.Icon className="h-8 w-8" />
+                    <lang.Icon className="h-6 w-6" />
                   </i>
                 ))}
               </span>
@@ -136,7 +136,7 @@ export default function Page() {
               <span className="ml-2 space-x-2">
                 {frameworks.map((fw) => (
                   <i key={fw.name} className="icon-bg inline-block" title={fw.name}>
-                    <fw.Icon className="h-8 w-8" />
+                    <fw.Icon className="h-6 w-6" />
                   </i>
                 ))}
               </span>
