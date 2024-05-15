@@ -33,6 +33,7 @@ import PowerPoint from '@/components/icons/powerpoint.svg'
 import Markdown from '@/components/icons/markdown.svg'
 import Notion from '@/components/icons/notion.svg'
 import Certifications from '@/components/Certifications'
+import Image from 'next/image'
 
 export default function Page() {
   const [showIcons, setShowIcons] = useState(true)
@@ -74,6 +75,41 @@ export default function Page() {
     { name: 'PowerPoint', Icon: PowerPoint },
     { name: 'Excel', Icon: Excel },
     { name: 'Notion', Icon: Notion },
+  ]
+
+  const experiences = [
+    {
+      title: 'AI Data Rater, WeLocalize (Feb ‘24 - Present)',
+      tasks: [
+        'Following of project-specific guidelines to conduct research on e-commerce data',
+        'Evaluating usefulness of filters and results based on research',
+        'Rating e-commerce data',
+      ],
+    },
+    {
+      title: 'Web Developer (Intern), Town of Deer Lake (Jul ‘23 - Sep ‘23)',
+      tasks: [
+        "Transitioned the town's website to an updated version of PHP, significantly enhancing site security and backend functionality, while also ensuring the preservation of existing features.",
+        'Optimized the website for search engines and improved page loading speed.',
+        'Overhauled the business directory, enhancing its functionality and user interface.',
+        'Exhibited strong problem-solving abilities by proactively identifying and addressing site issues.',
+        'Maintained effective communication with regular progress reports.',
+      ],
+    },
+    {
+      title: 'Administrative Assistant (Temp), PCSP Chamber of Commerce (Jul ‘21 - Sep ‘21)',
+      tasks: [
+        "Managed and updated the organization's WordPress and Squarespace websites, including data entry, image editing, and design contributions.",
+        'Supported the Executive Director with diverse administrative tasks, demonstrating flexibility and a broad skill set in office management and web administration.',
+      ],
+    },
+    {
+      title: 'Freelance Transcriptionist, Upwork (Jan ‘18 - Jul ‘21)',
+      tasks: [
+        'Provided high-quality transcription services, focusing on accuracy and timely delivery.',
+        'Developed proficiency in fast typing and attention to detail through numerous transcription projects.',
+      ],
+    },
   ]
 
   return (
@@ -135,10 +171,31 @@ export default function Page() {
           <h2>Education</h2>
           <div className="flex flex-col gap-5">
             <div className="flex flex-row gap-5 text-gray-900 dark:text-white">
-              <div>
+              <Image
+                src="/static/images/cna.png" // Path to the college logo
+                alt="College of the North Atlantic"
+                width={120} // Adjust the size as needed
+                height={120}
+                className="self-center"
+              />
+              <div className="self-center">
                 <div className="text-2xl font-extrabold">College of the North Atlantic</div>
                 <div className="text-lg">Diploma | Enterprise Web Development</div>
                 <div className="text-lg">2021 - 2023</div>
+              </div>
+            </div>
+            <div className="flex flex-row gap-5 text-gray-900 dark:text-white">
+              <Image
+                src="/static/images/cna.png" // Path to the college logo
+                alt="College of the North Atlantic"
+                width={120} // Adjust the size as needed
+                height={120}
+                className="self-center"
+              />
+              <div className="self-center">
+                <div className="text-2xl font-extrabold">College of the North Atlantic</div>
+                <div className="text-lg">Certificate | Comprehensive Arts & Science</div>
+                <div className="text-lg">2019 - 2021</div>
               </div>
             </div>
           </div>
@@ -146,7 +203,18 @@ export default function Page() {
           <hr />
 
           <h2>Experience</h2>
-          <div>{/* List your skills and tools here */}</div>
+          <div className="flex flex-col gap-5 text-gray-900 dark:text-white">
+            {experiences.map((experience, index) => (
+              <div key={index}>
+                <div className="text-xl font-bold">{experience.title}</div>
+                <ul className="ml-5 list-disc">
+                  {experience.tasks.map((task, taskIndex) => (
+                    <li key={taskIndex}>{task}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
       </AuthorLayout>
     </>
