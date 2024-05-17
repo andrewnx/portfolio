@@ -51,7 +51,7 @@ const projectsData: Project[] = [
     title: 'Baseball Team Manager',
     description: `Term Project for CP1855 Introduction to Python.
      `,
-    /*  imgSrc: '#', */
+    imgSrc: '/static/images/baseball-team.webp',
     href: 'https://baseballteammanager.vercel.app/',
     repo: 'https://github.com/andrewnx/baseballteammanager',
   },
