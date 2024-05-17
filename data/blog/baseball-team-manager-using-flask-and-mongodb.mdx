@@ -6,6 +6,19 @@ draft: false
 summary: Summary text here
 ---
 
+![Baseball Team Manager Preview](/static/images/baseball-team.webp)
+
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [Setting Up the Project](#setting-up-the-project)
+3. [Project Structure](#project-structure)
+4. [Configuration Files](#configuration-files)
+5. [Create the Flask Application](#create-the-flask-application)
+6. [Create the HTML Templates](#create-the-html-templates)
+7. [Setting Up MongoDB](#setting-up-mongodb)
+8. [Deploying to Vercel](#deploying-to-vercel)
+
 ## Introduction
 
 This application allows users to manage a baseball team, including adding, editing, and removing players. In this post, I will cover the key components and steps required to build it.
@@ -169,7 +182,7 @@ pymongo==4.6.1
 
 ---
 
-## Building the Application
+## Create the Flask Application
 
 In this application, **'baseball_manager.py'** serves as a utility module to separate the business logic from the application logic in **'application.py'**. This is beneficial for maintainability and clarity.
 
@@ -840,8 +853,8 @@ The **'register.html'** template provides a form for user registration. It inclu
 
 5. **Modify the Connection String**:
 
-- Replace **'<username>'** and **'<password>'** in the connection string with the database user's credentials.
-- Replace **'<dbname>'** with the name of the relevant database.
+- Replace **'\<username\>'** and **'\<password\>'** in the connection string with the database user's credentials.
+- Replace **'\<dbname\>'** with the name of the relevant database.
 
 Example:
 
@@ -849,7 +862,7 @@ Example:
 mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority
 ```
 
-Replace **'<username>'**, **'<password>'**, and **'<dbname>'** with the actual credentials and database name.
+Replace **'\<username\>'**, **'\<password\>'**, and **'\<dbname\>'** with the actual credentials and database name.
 
 ### Deploy to Vercel
 
@@ -857,4 +870,63 @@ Replace **'<username>'**, **'<password>'**, and **'<dbname>'** with the actual c
 
 ```sh
 npm install -g vercel
+```
+
+2. **Log In to Vercel**:
+
+```sh
+vercel login
+```
+
+3. **Create 'vercel.json' Configuration File** in root folder:
+
+```sh
+touch vercel.json
+```
+
+Add the following configuration:
+
+```json
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "./index.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
+  ]
+}
+```
+
+4. **Deploy the Project**: Deploy the project to Vercel for the first time.
+
+```sh
+vercel
+```
+
+Follow the prompts to complete the initial deployment. Vercel will automatically detect the **'index.py'** file and use it to start the Flask application.
+
+5. **Set Up Environment Variables on Vercel**:
+
+- Go to the project's dashboard on [vercel.com](https://vercel.com/).
+- Navigate to the "Settings" tab.
+- Under "Environment Variables", add the following variables:
+  - **'MONGODB_URI'**: Your MongoDB connection string.
+  - **'SECRET_KEY'**: A secret key for Flask sessions. This can be genereated using Python:
+  ```python
+  import os
+  os.urandom(24).hex()
+  ```
+  Copy the generated key and use it as the **'SECRET_KEY'**
+
+6. **Redeploy the Project**: After adding the environment variables, redeploy the project to Vercel to apply the changes.
+
+```sh
+vercel --prod
 ```
