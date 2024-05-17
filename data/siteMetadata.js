@@ -3,7 +3,7 @@ const siteMetadata = {
   title: 'andrewnx',
   author: 'Andrew Nicholas',
   headerTitle: 'andrewnx',
-  description: 'Developer Portfolio',
+  description: 'Documenting how I built my projects and how to replicate them.',
   language: 'en-us',
   theme: 'system', // system, dark or light
   siteUrl: 'https://www.andrewnx.com',
@@ -13,7 +13,7 @@ const siteMetadata = {
   /* mastodon: 'https://mastodon.social/@mastodonuser', */
   email: 'andrewbnx@outlook.com',
   github: 'https://github.com/andrewnx',
-  x: 'https://twitter.com/andrewnxext',
+  /* x: 'https://twitter.com/andrewnxext', */
   // twitter: 'https://twitter.com/Twitter',
   /* facebook: 'https://facebook.com', */
   /* youtube: 'https://youtube.com', */

@@ -1,0 +1,631 @@
+---
+title: Baseball Team Manager using Flask and MongoDB
+date: '2024-05-17'
+tags: ['HTML', 'CSS', 'Python', 'Flask', 'MongoDB', 'Vercel']
+draft: false
+summary: Summary text here
+---
+
+## Introduction
+
+This application allows users to manage a baseball team, including adding, editing, and removing players. In this post, I will cover the key components and steps required to build it.
+
+Technologies used include:
+
+- HTML
+- CSS
+- Python
+- Flask
+- MongoDB
+- Vercel
+
+---
+
+## Setting Up the Project
+
+### Initial Setup
+
+1. **Install Python**: Ensure you have Python installed. You can download it from the [official website](https://www.python.org/downloads/).
+
+2. **Create a Virtual Environment**:
+
+```sh
+python -m venv venv
+```
+
+3. **Activate the Virtual Environment**:
+
+- On Windows:
+
+```sh
+.\venv\Scripts\Activate
+```
+
+- On Mac/Linux:
+
+```sh
+source venv/bin/Activate
+```
+
+4. **Install Flask and Other Dependencies**:
+
+```sh
+pip install Flask flask-bcrypt flask-login Flask-WTF Flask-PyMongo
+```
+
+5. **Set Up Poetry for Dependency Management:**
+
+- Install Poetry:
+
+```sh
+curl -sSL https://install.python-poetry.org | python3 -
+```
+
+- Initialize Poetry:
+
+```sh
+poetry init
+```
+
+- Add Dependencies:
+
+```sh
+poetry add flask flask-bcrypt flask-login Flask-WTF flask-PyMongo
+```
+
+- Install Dependencies:
+
+```sh
+poetry install
+```
+
+---
+
+## Project Structure
+
+Now set up the project structure. This can be done manually or by using the command line.
+
+### Create the Project Structure
+
+1. **Create the project directory and navigate to it**:
+
+```sh
+mkdir baseballteammanager
+cd baseballteammanager
+```
+
+2. **Create the following directories and files**:
+
+```sh
+mkdir templates static static/css
+touch application.py baseball_manager.py index.py requirements.txt pyproject.toml
+touch templates/index.html templates/add_player.html templates/edit_player.html templates/login.html templates/register.html
+touch static/css/styles.css
+```
+
+The project structure should now look like this:
+
+```
+baseballteammanager/
+    application.py
+    baseball_manager.py
+    index.py
+    templates/
+        add_player.html
+        edit_player.html
+        index.html
+        login.html
+        register.html
+    static/
+        css/
+            styles.css
+    requirements.txt
+    pyproject.toml
+```
+
+---
+
+## Configuration Files
+
+**'pyproject.toml'**
+
+This file is used to define the project and its dependencies when using Poetry. Open **'pyproject.toml'** and check to make sure nothing is missing:
+
+```toml
+[tool.poetry]
+name = "baseballteammanager"
+version = "0.1.0"
+description = "A Baseball Team Manager application"
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Flask = "^2.1.2"
+flask-bcrypt = "^1.0.1"
+flask-login = "^0.6.3"
+Flask-WTF = "^1.2.1"
+Flask-PyMongo = "^2.3.0"
+WTForms = "^3.1.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+```
+
+**'requirements.txt'**
+
+This lists the dependencies required by the project. Ensure it contains the following:
+
+```txt
+bcrypt==4.1.2
+click==8.1.7
+flask==2.1.2
+flask-bcrypt==1.0.1
+flask-login==0.6.3
+flask-pymongo==2.3.0
+flask-wtf==1.2.1
+pymongo==4.6.1
+```
+
+---
+
+## Building the Application
+
+In this application, **'baseball_manager.py'** serves as a utility module to separate the business logic from the application logic in **'application.py'**. This is beneficial for maintainability and clarity.
+
+### Overview
+
+**'application.py'**
+
+- Flask app setup
+- User and form classes
+- Routes for managing players and user authentication
+- Calls functions from **'baseball_manager.py'** for handling player and user data
+
+**'baseball_manager.py'**
+
+- Functions to handle CRUD operations for players
+- Functions for user management
+- A helper function to calculate batting average
+
+### Creating the Flask Application
+
+1. #### Set up the main application file ('application.py'):
+
+```python
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager, login_user, current_user, login_required, logout_user
+import baseball_manager
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
+from flask_pymongo import PyMongo
+import os
+from bson import ObjectId
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
+mongo = PyMongo()
+
+class User:
+    def __init__(self, user_data):
+        self.user_data = user_data
+
+    def is_active(self):
+        return True
+
+    def is_authenticated(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.user_data['_id'])
+
+def create_app():
+    app = Flask(__name__)
+    app.config["MONGO_URI"] = os.environ.get('MONGODB_URI')
+    app.config["SECRET_KEY"] = os.environ.get('SECRET_KEY') or 'fgqAaLGwkP'
+    mongo.init_app(app)
+
+    bcrypt = Bcrypt(app)
+    login_manager = LoginManager(app)
+    login_manager.login_view = 'login'
+
+    class RegistrationForm(FlaskForm):
+        username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+        password = PasswordField('Password', validators=[DataRequired()])
+        confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+        submit = SubmitField('Sign Up')
+
+        def validate_username(self, username):
+            users_collection = mongo.db.users
+            user = users_collection.find_one({'username': username.data})
+            if user:
+                raise ValidationError('That username is already taken. Please choose a different one.')
+
+    class LoginForm(FlaskForm):
+        username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+        password = PasswordField('Password', validators=[DataRequired()])
+        submit = SubmitField('Login')
+
+    @app.route('/')
+    def index():
+        if current_user.is_authenticated:
+            user_id = current_user.get_id()  # Use get_id() method to get the user's ID
+            logging.debug(f"Fetching lineup for user_id: {user_id}")
+            lineup = baseball_manager.get_players(mongo, user_id)
+            logging.debug(f"Lineup: {lineup}")
+        else:
+            lineup = []  # Empty list for unauthenticated users
+
+        return render_template('index.html', lineup=lineup, is_authenticated=current_user.is_authenticated)
+
+    @app.route('/add_player', methods=['GET', 'POST'])
+    def add_player_route():
+        error_message = None
+        if request.method == 'POST':
+            name = request.form['name']
+            position = request.form['position']
+            at_bats = request.form['at_bats']
+            hits = request.form['hits']
+
+            # Data validation
+            if not name or not position or not at_bats.isdigit() or not hits.isdigit():
+                error_message = "Invalid input. Please fill out all fields correctly."
+            elif position not in ['C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'P']:
+                error_message = "Invalid position. Please enter a valid position."
+
+            if not error_message:
+                user_id = current_user.get_id()
+                baseball_manager.add_player(mongo, name, position, int(at_bats), int(hits), user_id)
+
+        return render_template('add_player.html', error=error_message)
+
+    @app.route('/remove_player/<string:player_id>')
+    def remove_player(player_id):
+        user_id = current_user.get_id()
+        baseball_manager.remove_player(mongo, ObjectId(player_id), user_id)
+        return redirect(url_for('index'))
+
+    @app.route('/edit_player/<string:player_id>', methods=['GET'])
+    @login_required
+    def edit_player(player_id):
+        player = baseball_manager.get_player(mongo, ObjectId(player_id))
+        if player is None:
+            return redirect(url_for('index'))  # Redirect if player not found
+        return render_template('edit_player.html', player=player)
+
+    @app.route('/update_player', methods=['POST'])
+    @login_required
+    def update_player():
+        error_message = None
+        player_id = request.form.get('player_id')
+        player_id = ObjectId(player_id)
+        original_name = request.form.get('original_name')
+        name = request.form.get('name', '')
+        position = request.form.get('position', '')
+        at_bats = request.form.get('at_bats', '')
+        hits = request.form.get('hits', '')
+
+        player = baseball_manager.get_player(mongo, ObjectId(player_id))
+        if player:
+            if name:
+                player.name = name
+            if position:
+                player.position = position
+            if at_bats.isdigit():
+                player.at_bats = int(at_bats)
+            if hits.isdigit():
+                player.hits = int(hits)
+            player.avg = baseball_manager.get_batting_avg(player.at_bats, player.hits)
+        else:
+            error_message = "Player not found."
+
+        if error_message:
+            return render_template('edit_player.html', player=[original_name, position, at_bats, hits], error=error_message)
+
+        return redirect(url_for('index'))
+
+    @app.route("/register", methods=['GET', 'POST'])
+    def register():
+        form = RegistrationForm()
+        if form.validate_on_submit():
+            hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+            user_data = {'username': form.username.data, 'password': hashed_password}
+            user_id = baseball_manager.add_user(mongo, user_data)
+            baseball_manager.clone_default_lineup_for_user(mongo, user_id)
+            return redirect(url_for('login'))
+        return render_template('register.html', title='Register', form=form)
+
+    @app.route("/login", methods=['GET', 'POST'])
+    def login():
+        form = LoginForm()
+        if form.validate_on_submit():
+            users_collection = mongo.db.users
+            user = users_collection.find_one({'username': form.username.data})
+            if user and bcrypt.check_password_hash(user['password'], form.password.data):
+                user_obj = User(user)  # Wrap dict in User class
+                login_user(user_obj)
+                return redirect(url_for('index'))
+            else:
+                flash('Login Unsuccessful. Please check username and password', 'danger')
+        return render_template('login.html', title='Login', form=form)
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        users_collection = mongo.db.users
+        user = users_collection.find_one({'_id': ObjectId(user_id)})
+        return User(user) if user else None
+
+    @app.route('/logout')
+    @login_required
+    def logout():
+        logout_user()
+        return redirect(url_for('index'))
+
+
+    if __name__ == '__main__':
+        app.run(debug=True)
+
+    return app
+```
+
+Explanation:
+
+- **Import Statements**: Import necessary modules and initialize the MongoDB connection.
+- **User Class**: Represents a user in the application.
+- **create_app Function**: Sets up the Flask application, initializes extensions, and defines routes for handling requests.
+- **RegistrationForm and LoginForm**: Define the forms for user registration and login.
+- **Routes**: Define the endpoints for the application, including adding, editing, and removing players, as well as user registration, login, and logout.
+
+2. #### Set up the business logic module ('baseball_manager.py'):
+
+```python
+from bson import ObjectId
+import logging
+logging.basicConfig(level=logging.DEBUG)
+# Define the default lineup
+default_lineup = [
+    {"name": "Jordan Bell", "position": "P", "at_bats": 30, "hits": 5},
+    {"name": "John Doe", "position": "C", "at_bats": 50, "hits": 15},
+    {"name": "Jane Smith", "position": "1B", "at_bats": 70, "hits": 20},
+    {"name": "Mike Johnson", "position": "2B", "at_bats": 60, "hits": 18},
+    {"name": "Sarah Brown", "position": "3B", "at_bats": 55, "hits": 16},
+    {"name": "Alex Lee", "position": "SS", "at_bats": 65, "hits": 22},
+    {"name": "Chris Green", "position": "LF", "at_bats": 45, "hits": 12},
+    {"name": "Pat Morgan", "position": "CF", "at_bats": 80, "hits": 30},
+    {"name": "Taylor King", "position": "RF", "at_bats": 40, "hits": 10}
+]
+
+def get_batting_avg(at_bats, hits):
+    if at_bats == 0:
+        return 0
+    avg = hits / at_bats
+    return round(avg, 3)
+
+def clone_default_lineup_for_user(mongo, user_id):
+    players_collection = mongo.db.players  # Access the 'players' collection
+    for player_data in default_lineup:
+        player_data['user_id'] = user_id
+        player_data['avg'] = get_batting_avg(player_data["at_bats"], player_data["hits"])
+        logging.debug(f"Cloning player for user {user_id}: {player_data}")
+        players_collection.insert_one(player_data)
+
+def get_players(mongo, user_id):
+    players_collection = mongo.db.players
+    return list(players_collection.find({'user_id':  ObjectId(user_id)}))
+
+def add_player(mongo, name, position, at_bats, hits, user_id):
+    players_collection = mongo.db.players
+    avg = get_batting_avg(at_bats, hits)
+    new_player = {
+        "name": name,
+        "position": position,
+        "at_bats": at_bats,
+        "hits": hits,
+        "avg": avg,
+        "user_id": user_id
+    }
+    players_collection.insert_one(new_player)
+
+def update_player(mongo, player_id, name, position, at_bats, hits):
+    players_collection = mongo.db.players
+    avg = get_batting_avg(at_bats, hits)
+    players_collection.update_one(
+        {'_id': ObjectId(player_id)},
+        {'$set': {
+            "name": name,
+            "position": position,
+            "at_bats": at_bats,
+            "hits": hits,
+            "avg": avg
+        }}
+    )
+
+def remove_player(mongo, player_id, user_id):
+    players_collection = mongo.db.players
+    players_collection.delete_one({'_id': player_id, 'user_id': user_id})
+
+def get_player(mongo, player_id):
+    players_collection = mongo.db.players
+    return players_collection.find_one({'_id': player_id})
+
+def add_user(mongo, user_data):
+    users_collection = mongo.db.users
+    new_user = users_collection.insert_one(user_data)
+    return new_user.inserted_id
+
+def get_user(mongo, username):
+    users_collection = mongo.db.users
+    return users_collection.find_one({'username': username})
+```
+
+Explanation:
+
+- **Default Lineup**: A predefined list of players to initialize for a new user.
+- **CRUD Functions**: Functions for creating, reading, updating, and deleting player data.
+- **Helper Functions**: Functions to calculate batting average and manage user data.
+
+3. #### Create the WSGI entry point ('wsgi.py') in the root folder:
+
+```python
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from application import create_app
+
+app = create_app()
+
+if __name__ == "__main__":
+    app.run()
+```
+
+Explanation:
+
+- **WSGI Configuration**: Sets up the WSGI entry point for the application. This is necessary for deploying the application.
+
+4. #### Create the index script ('index.py') in the root folder:
+
+```python
+from wsgi import app
+```
+
+Explanation:
+
+- **Index Script**: Simplifies Vercel deployment by importing the app from the WSGI configuration.
+
+5. #### Create the Vercel configuration file ('vercel.json'):
+
+```json
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "./index.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
+  ]
+}
+```
+
+Explanation:
+
+- **Vercel Configuration**: Defines the build and routing configuration for deploying the application on Vercel.
+
+6. #### Create the HTML templates:
+
+**'templates/index.html'**:
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Baseball Team Manager</title>
+    <!-- Add Bootstrap for styling -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="{{ url_for('index') }}">Baseball Team Manager</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          {% if is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="#">{{ current_user.username }}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      {% if is_authenticated %}
+      <p>Welcome, {{ current_user.username }}!</p>
+
+      <a href="{{ url_for('add_player_route') }}" class="btn btn-primary mb-3">Add Player</a>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Pos</th>
+            <th>AB</th>
+            <th>H</th>
+            <th>AVG</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if lineup %} {% if lineup|length > 0 %} {% for player in lineup %}
+          <tr>
+            <td>{{ player['name'] }}</td>
+            <td>{{ player['position'] }}</td>
+            <td>{{ player['at_bats'] }}</td>
+            <td>{{ player['hits'] }}</td>
+            <td>{{ player['avg'] }}</td>
+            <td>
+              <a href="{{ url_for('edit_player', player_id=player['_id']|string) }}">Edit</a>
+              |
+              <a href="{{ url_for('remove_player', player_id=player['_id']|string) }}">Remove</a>
+            </td>
+          </tr>
+          {% endfor %} {% else %}
+          <tr>
+            <td colspan="6">No players in your lineup.</td>
+          </tr>
+          {% endif %} {% endif %}
+        </tbody>
+      </table>
+      {% else %}
+      <p>
+        Welcome to Baseball Team Manager! Please
+        <a href="{{ url_for('login') }}">log in</a> or
+        <a href="{{ url_for('register') }}">register</a>.
+      </p>
+      {% endif %}
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  </body>
+</html>
+```

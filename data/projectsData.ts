@@ -1,8 +1,9 @@
 interface Project {
-  title: string,
-  description: string,
-  href?: string,
-  imgSrc?: string,
+  title: string
+  description: string
+  href?: string
+  repo?: string
+  imgSrc?: string
 }
 
 const projectsData: Project[] = [
@@ -12,13 +13,15 @@ const projectsData: Project[] = [
      `,
     /* imgSrc: '#', */
     href: 'https://polite-medovik-fc1ae5.netlify.app/',
+    repo: 'https://github.com/andrewnx/vuecards',
   },
   {
     title: 'Weather App',
     description: `Assignment for CP1580 Using Internet APIs.
      `,
     /* imgSrc: '#', */
-    href: '#',
+    href: 'https://weather-andrewn.vercel.app/',
+    repo: 'https://github.com/andrewnx/weather',
   },
   {
     title: 'Movie App',
@@ -26,6 +29,7 @@ const projectsData: Project[] = [
      `,
     /* imgSrc: '#', */
     href: 'https://vermillion-lamington-702a73.netlify.app/',
+    repo: 'https://github.com/andrewnx/movies',
   },
   {
     title: 'Ladderspike',
@@ -33,20 +37,23 @@ const projectsData: Project[] = [
      `,
     /* imgSrc: '#', */
     href: 'http://anwp.atwebpages.com/',
+    repo: 'https://github.com/andrewnx/ladderspike',
   },
   {
     title: 'Memory Game',
     description: `Term Project for CP1292 JavaScript and NodeJS.
      `,
-   /*  imgSrc: '#', */
+    /*  imgSrc: '#', */
     href: 'https://gentle-mandazi-cdb867.netlify.app/',
+    repo: 'https://github.com/andrewnx/memorygame',
   },
   {
     title: 'Baseball Team Manager',
     description: `Term Project for CP1855 Introduction to Python.
      `,
-   /*  imgSrc: '#', */
+    /*  imgSrc: '#', */
     href: 'https://baseballteammanager.vercel.app/',
+    repo: 'https://github.com/andrewnx/baseballteammanager',
   },
 ]
 
