@@ -497,33 +497,9 @@ Explanation:
 
 - **Index Script**: Simplifies Vercel deployment by importing the app from the WSGI configuration.
 
-5. #### Create the Vercel configuration file ('vercel.json'):
+### Create the HTML templates
 
-```json
-{
-  "version": 2,
-  "builds": [
-    {
-      "src": "./index.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/"
-    }
-  ]
-}
-```
-
-Explanation:
-
-- **Vercel Configuration**: Defines the build and routing configuration for deploying the application on Vercel.
-
-6. #### Create the HTML templates:
-
-**'templates/index.html'**:
+#### 'index.html':
 
 ```html
 <!doctype html>
@@ -628,4 +604,257 @@ Explanation:
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   </body>
 </html>
+```
+
+Explanation:
+
+The **'index.html'** template is the main page of the application. It includes a navigation bar with login and register options, or logout if the user is authenticated. It displays a table with the player's lineup if the user is logged in, or prompts the user to log in or register if not.
+
+#### 'add_player.html':
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Add Player</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Add Player</h1>
+      <form method="post" action="{{ url_for('add_player_route') }}">
+        {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+
+        <div class="form-group">
+          <input
+            type="text"
+            name="name"
+            class="form-control"
+            placeholder="Player's Name"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <input
+            type="text"
+            name="position"
+            class="form-control"
+            placeholder="Position (e.g., C, 1B)"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <input type="number" name="at_bats" class="form-control" placeholder="At Bats" required />
+        </div>
+        <div class="form-group">
+          <input type="number" name="hits" class="form-control" placeholder="Hits" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Add Player</button>
+      </form>
+      <a href="{{ url_for('index') }}" class="btn btn-secondary">Back to Lineup</a>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  </body>
+</html>
+```
+
+Explanation:
+
+The **'add_player.html'** template provides a form for adding a new player to the team. It includes input fields for the player's name, position, at-bats, and hits. If there are any errors in the form submission, an alert message will be displayed.
+
+#### 'edit_player.html':
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Edit Player</title>
+    <!-- Add Bootstrap for styling -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Edit Player</h1>
+      <form method="post" action="{{ url_for('update_player') }}">
+        {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+
+        <!-- Hidden input for player_id -->
+        <input type="hidden" name="player_id" value="{{ player._id }}" />
+
+        <!-- Original name, used for reference in case of changes -->
+        <input type="hidden" name="original_name" value="{{ player.name }}" />
+
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" name="name" class="form-control" value="{{ player.name }}" />
+        </div>
+        <div class="form-group">
+          <label>Position</label>
+          <input type="text" name="position" class="form-control" value="{{ player.position }}" />
+        </div>
+        <div class="form-group">
+          <label>At Bats</label>
+          <input type="number" name="at_bats" class="form-control" value="{{ player.at_bats }}" />
+        </div>
+        <div class="form-group">
+          <label>Hits</label>
+          <input type="number" name="hits" class="form-control" value="{{ player.hits }}" />
+        </div>
+        <button type="submit" class="btn btn-primary">Update Player</button>
+      </form>
+      <a href="{{ url_for('index') }}" class="btn btn-secondary">Back to Lineup</a>
+    </div>
+  </body>
+</html>
+```
+
+Explanation:
+
+The **'edit_player.html'** template provides a form for editing an existing player's details. The form is pre-filled with the current details of the player, and includes hidden fields for the player ID and original name. If there are any errors, an alert message will be displayed.
+
+#### 'login.html':
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Login</h1>
+      <form method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+          {{ form.username.label(class="form-control-label") }} {{
+          form.username(class="form-control") }} {% for error in form.username.errors %}
+          <span style="color: red">[{{ error }}]</span>
+          {% endfor %}
+        </div>
+        <div class="form-group">
+          {{ form.password.label(class="form-control-label") }} {{
+          form.password(class="form-control") }} {% for error in form.password.errors %}
+          <span style="color: red">[{{ error }}]</span>
+          {% endfor %}
+        </div>
+        <div class="form-group">{{ form.submit(class="btn btn-primary") }}</div>
+      </form>
+    </div>
+  </body>
+</html>
+```
+
+Explanation:
+
+The **'login.html'** template provides a form for user login. It uses Flask-WTF to generate the form fields and handle validation. Errors will be displayed next to the respective fields if there are any validation issues.
+
+#### 'register.html':
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Register</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Register</h1>
+      <form method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+          {{ form.username.label(class="form-control-label") }} {{
+          form.username(class="form-control") }} {% for error in form.username.errors %}
+          <span style="color: red">[{{ error }}]</span>
+          {% endfor %}
+        </div>
+        <div class="form-group">
+          {{ form.password.label(class="form-control-label") }} {{
+          form.password(class="form-control") }} {% for error in form.password.errors %}
+          <span style="color: red">[{{ error }}]</span>
+          {% endfor %}
+        </div>
+        <div class="form-group">
+          {{ form.confirm_password.label(class="form-control-label") }} {{
+          form.confirm_password(class="form-control") }} {% for error in
+          form.confirm_password.errors %}
+          <span style="color: red">[{{ error }}]</span>
+          {% endfor %}
+        </div>
+        <div class="form-group">{{ form.submit(class="btn btn-primary") }}</div>
+      </form>
+    </div>
+  </body>
+</html>
+```
+
+Explanation:
+
+The **'register.html'** template provides a form for user registration. It includes fields for the username, password, and password confirmation, and uses Flask-WTF for validation. Errors are displayed next to the respective fields if there are any issues.
+
+### Setting Up MongoDB
+
+1. **Create a MongoDB Atlas Account**: If you don't already have a MongoDB Atlas account, create one at [mongodb.com](https://www.mongodb.com/)
+
+2. **Create a Cluster**: Follow the instructions on the Mongo website to create a new cluster. Choose the free tier for development purposes.
+
+3. **Create a Database User**:
+
+- Go to the Database Access section in the MongoDB Atlas dashboard.
+- Click on "Add New Database User."
+- Create a username and password for the database user. Ensure these credentials are stored securely, as they are needed to connect the Flask application to MongoDB.
+
+4. **Get the Connection String**:
+
+- Go to the Clusters section in the MongoDB Atlas dashboard.
+- Click on "Connect" for the relevant cluster.
+- Choose "Connect your application."
+- Copy the connection string provided.
+
+5. **Modify the Connection String**:
+
+- Replace **'<username>'** and **'<password>'** in the connection string with the database user's credentials.
+- Replace **'<dbname>'** with the name of the relevant database.
+
+Example:
+
+```
+mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority
+```
+
+Replace **'<username>'**, **'<password>'**, and **'<dbname>'** with the actual credentials and database name.
+
+### Deploy to Vercel
+
+1. **Install Vercel CLI**:
+
+```sh
+npm install -g vercel
 ```
