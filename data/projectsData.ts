@@ -27,23 +27,15 @@ const projectsData: Project[] = [
     title: 'Movie App',
     description: `Assignment for CP1580 Using Internet APIs.
      `,
-    /* imgSrc: '#', */
+    imgSrc: '/static/images/movieapp.webp',
     href: 'https://vermillion-lamington-702a73.netlify.app/',
     repo: 'https://github.com/andrewnx/movies',
-  },
-  {
-    title: 'Ladderspike',
-    description: `Term Project for CP1410 Web Analysis & Design.
-     `,
-    /* imgSrc: '#', */
-    href: 'http://anwp.atwebpages.com/',
-    repo: 'https://github.com/andrewnx/ladderspike',
   },
   {
     title: 'Memory Game',
     description: `Term Project for CP1292 JavaScript and NodeJS.
      `,
-    /*  imgSrc: '#', */
+    imgSrc: '/static/images/memorygame.webp',
     href: 'https://gentle-mandazi-cdb867.netlify.app/',
     repo: 'https://github.com/andrewnx/memorygame',
   },
